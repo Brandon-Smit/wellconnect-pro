@@ -1,0 +1,166 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: "Warm up"
+    - duration: 120
+      arrivalRate: 5
+      rampTo: 50
+      name: "Sustained load"
+    - duration: 600
+      arrivalRate: 50
+      name: "Stress test"
+  defaults:
+    headers:
+      Authorization: "Bearer ${LOAD_TEST_TOKEN}"
+      Content-Type: "application/json"
+
+scenarios:
+  - name: "Content Generation Workflow"
+    flow:
+      - post:
+          url: "/api/generate-content"
+          json:
+            affiliateLink: "https://example-mental-health-service.com"
+            targetIndustry: "technology"
+            companySize: "medium"
+          capture:
+            - json: "$.subject"
+              as: "generatedSubject"
+            - json: "$.body"
+              as: "generatedBody"
+          expect:
+            - statusCode: 200
+            - contentType: "application/json"
+            - hasProperty: "subject"
+            - hasProperty: "body"
+
+  - name: "Email Preview Generation"
+    flow:
+      - post:
+          url: "/api/email-preview"
+          json:
+            affiliateLink: "https://example-mental-health-service.com"
+            targetIndustry: "finance"
+            companySize: "large"
+          capture:
+            - json: "$.previewVariants"
+              as: "emailVariants"
+          expect:
+            - statusCode: 200
+            - contentType: "application/json"
+            - hasProperty: "previewVariants"
+            - hasPropertyLength: "previewVariants"
+              greaterThan: 1
+
+  - name: "Compliance Service Load Test"
+    flow:
+      - post:
+          url: "/api/compliance/check"
+          json:
+            affiliateLink: "https://example-affiliate.com"
+            industry: "technology"
+            companySize: "medium"
+          capture:
+            - json: "$.complianceStatus"
+              as: "complianceResult"
+          expect:
+            - statusCode: 200
+            - contentType: "application/json"
+            - hasProperty: "complianceStatus"
+
+  - name: "Performance Tracking Service Load Test"
+    flow:
+      - post:
+          url: "/api/performance/track"
+          json:
+            campaignId: "{{ $randomString() }}"
+            metrics:
+              emailsSent: 100
+              openRate: 25
+              clickRate: 10
+          capture:
+            - json: "$.trackingId"
+              as: "performanceTrackingId"
+          expect:
+            - statusCode: 201
+            - contentType: "application/json"
+            - hasProperty: "trackingId"
+
+  - name: "Machine Learning Personalization Load Test"
+    flow:
+      - post:
+          url: "/api/ml/personalize"
+          json:
+            industry: "{{ $oneOf(['technology', 'healthcare', 'finance']) }}"
+            companySize: "{{ $oneOf(['small', 'medium', 'large']) }}"
+            previousInteractions: 
+              - type: "{{ $oneOf(['email', 'click', 'download']) }}"
+                timestamp: "{{ $timestamp() }}"
+                contentType: "wellness"
+            ethicalConstraints:
+              sensitivityLevel: "{{ $randomNumber(0, 1) }}"
+              communicationPreferences: ["mental-health", "professional-development"]
+          capture:
+            - json: "$.recommendedContentType"
+              as: "personalizedContentType"
+          expect:
+            - statusCode: 200
+            - contentType: "application/json"
+            - hasProperty: "recommendedContentType"
+
+  - name: "Email Dispatch Simulation"
+    flow:
+      - post:
+          url: "/api/email/dispatch"
+          json:
+            affiliateLink: "https://example-affiliate.com"
+            dailyEmailLimit: 50
+            targetIndustry: "{{ $oneOf(['technology', 'healthcare', 'finance']) }}"
+          capture:
+            - json: "$.dispatchResults.emailsSent"
+              as: "emailsSentCount"
+          expect:
+            - statusCode: 200
+            - contentType: "application/json"
+            - hasProperty: "dispatchResults"
+
+reporting:
+  - module: "artillery-plugin-metrics-by-endpoint"
+  - module: "artillery-plugin-statsd"
+    config:
+      host: "localhost"
+      port: 8125
+
+plugins:
+  ensure:
+    - name: "Compliance Service Response Time"
+      plugin: "ensure"
+      opts:
+        max: 200
+        p95: 50
+    - name: "Performance Tracking Service Response Time"
+      plugin: "ensure"
+      opts:
+        max: 250
+        p95: 75
+    - name: "Machine Learning Personalization Response Time"
+      plugin: "ensure"
+      opts:
+        max: 300
+        p95: 100
+
+ensure:
+  - p99: 500
+  - maxErrorRate: 1
+
+hooks:
+  beforeStep:
+    - log: "Executing load test step: {{ $stepName }}"
+  afterStep:
+    - log: "Completed load test step: {{ $stepName }}"
+  beforeScenario:
+    - log: "Starting scenario: {{ $scenarioName }}"
+  afterScenario:
+    - log: "Completed scenario: {{ $scenarioName }}"

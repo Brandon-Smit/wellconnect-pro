@@ -1,0 +1,113 @@
+{
+  "name": "wellconnect-pro",
+  "version": "1.0.0",
+  "description": "Intelligent Mental Health Marketing Platform",
+  "main": "dist/index.js",
+  "private": true,
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "dev": "next dev -p 3008",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:integration": "jest --config jest.integration.config.js",
+    "test:setup": "jest --init",
+    "load-test": "artillery run performance-tests/load-test.yml",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "prepare": "husky install",
+    "vercel-build": "next build",
+    "vercel-deploy": "vercel deploy --prod",
+    "vercel-preview": "vercel preview",
+    "test:services": "jest --maxWorkers=2 auth-service.test.ts email-service.test.ts",
+    "test:ai": "jest --maxWorkers=2 ai-inference.test.ts",
+    "test:database": "jest --maxWorkers=2 database.test.ts",
+    "test:compliance": "jest --maxWorkers=2 compliance-service.test.ts",
+    "test:email-campaign": "jest --maxWorkers=2 email-campaign-service.test.ts",
+    "test:config": "jest --maxWorkers=2 config-service.test.ts"
+  },
+  "keywords": [
+    "mental-health",
+    "hr-tech",
+    "ai-marketing",
+    "ethical-ai"
+  ],
+  "author": "WellConnect Pro Team",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@hookform/resolvers": "^3.10.0",
+    "axios": "^1.6.2",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.0.3",
+    "firebase": "^11.2.0",
+    "next": "^15.1.6",
+    "openai": "^3.2.1",
+    "pino": "^8.11.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.54.2",
+    "uuid": "^9.0.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.25.9",
+    "@babel/preset-env": "^7.26.7",
+    "@babel/preset-react": "^7.26.3",
+    "@babel/preset-typescript": "^7.26.0",
+    "@babel/runtime": "^7.26.7",
+    "@chakra-ui/react": "^3.6.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/body-parser": "^1.19.5",
+    "@types/chai": "^5.0.1",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/helmet": "^0.0.48",
+    "@types/jest": "^29.5.14",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.13.1",
+    "@types/nodemailer": "^6.4.17",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "@types/react-icons": "^2.2.7",
+    "@types/sinon": "^17.0.3",
+    "@types/uuid": "^9.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.23.0",
+    "@typescript-eslint/parser": "^8.23.0",
+    "artillery": "^2.0.0-33",
+    "eslint": "^8.38.0",
+    "eslint-config-next": "^13.3.0",
+    "eslint-plugin-react": "^7.37.4",
+    "husky": "^8.0.3",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^29.7.0",
+    "jest-dom": "^4.0.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "next-themes": "^0.4.4",
+    "nodemailer": "^6.10.0",
+    "prettier": "^2.8.7",
+    "react-query": "^3.39.3",
+    "recharts": "^2.15.1",
+    "recoil": "^0.7.7",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.7.3"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.js"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less|scss|sass)$": "identity-obj-proxy"
+    },
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "ts-jest"
+    }
+  }
+}

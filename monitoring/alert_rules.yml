@@ -1,0 +1,47 @@
+groups:
+- name: wellconnect_pro_alerts
+  rules:
+  - alert: SystemUnhealthy
+    expr: up{job="wellconnect_pro"} == 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "WellConnect Pro system is down"
+      description: "The WellConnect Pro application has been down for more than 5 minutes."
+
+  - alert: HighComplianceViolations
+    expr: increase(compliance_violations_total[1h]) > 10
+    for: 1h
+    labels:
+      severity: warning
+    annotations:
+      summary: "High number of compliance violations"
+      description: "More than 10 compliance violations detected in the last hour."
+
+  - alert: LowEthicalScore
+    expr: email_ethical_score < 0.7
+    for: 30m
+    labels:
+      severity: high
+    annotations:
+      summary: "Low ethical content score"
+      description: "Email content ethical score has fallen below acceptable threshold."
+
+  - alert: AffiliatePerformanceDrop
+    expr: affiliate_conversion_rate < 0.02
+    for: 1d
+    labels:
+      severity: warning
+    annotations:
+      summary: "Affiliate conversion rate declining"
+      description: "Affiliate link conversion rate has dropped below 2% for a full day."
+
+  - alert: HighEmailBounceRate
+    expr: email_bounce_rate > 0.05
+    for: 1h
+    labels:
+      severity: high
+    annotations:
+      summary: "High email bounce rate"
+      description: "Email bounce rate exceeds 5% for more than an hour."

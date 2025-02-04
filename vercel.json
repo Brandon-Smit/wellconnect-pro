@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "name": "wellconnect-pro",
+  "builds": [
+    { "src": "next.config.js", "use": "@vercel/next" }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "api/$1" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ],
+  "env": {
+    "NEXT_PUBLIC_APP_ENV": "production",
+    "NODE_ENV": "production"
+  },
+  "regions": ["all"],
+  "framework": "nextjs",
+  "optimizeRoute": true,
+  "serverless": true,
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET,POST,PUT,DELETE,OPTIONS" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "application": {
+    "name": "WellConnect Pro",
+    "version": "1.0.0",
+    "environment": "development"
+  },
+  "ai": {
+    "model": "mistral_7b",
+    "ethicalThreshold": 0.8,
+    "contentPersonalization": true
+  },
+  "email": {
+    "dispatchRateLimit": 50,
+    "dailyQuota": 500,
+    "retryAttempts": 3
+  },
+  "performance": {
+    "cpuThreshold": 80,
+    "memoryThreshold": 85,
+    "slowQueryThreshold": 2000
+  },
+  "compliance": {
+    "gdpr": {
+      "enabled": true,
+      "consentRequired": true
+    },
+    "canSpam": {
+      "enabled": true,
+      "unsubscribeLink": true
+    }
+  },
+  "affiliate": {
+    "trackingEnabled": true,
+    "commissionRate": 0.10,
+    "ethicalScoreThreshold": 0.7
+  },
+  "logging": {
+    "level": "info",
+    "directory": "./logs",
+    "maxFiles": 10,
+    "maxSize": "10M"
+  }
+}
